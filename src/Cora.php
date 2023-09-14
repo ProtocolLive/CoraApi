@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.14.01
+ * @version 2023.09.14.02
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -168,7 +168,12 @@ final class Cora{
       $post['payment_forms'][] = 'PIX';
     endif;
 
-    $curl = curl_init(self::Url . '/invoices/');
+    $url = self::Url . '/invoices/';
+    file_put_contents(
+      DirLogs . '/CoraApi.log',
+      'Send ' . $url . PHP_EOL . json_encode($post, JSON_PRETTY_PRINT)
+    );
+    $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_SSLCERT, $this->Certificado);
     curl_setopt($curl, CURLOPT_SSLKEY, $this->Privkey);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
