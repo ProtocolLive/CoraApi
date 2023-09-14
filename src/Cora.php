@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.14.02
+ * @version 2023.09.14.03
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -32,6 +32,13 @@ final class Cora{
       'Content-Type: application/x-www-form-urlencoded'
     ]);
     $return = json_decode(curl_exec($curl), true);
+    if(isset($return['error'])):
+      file_put_contents(
+        DirLogs . '/CoraApi.log',
+        'Auth error:' . $return['error']
+      );
+      return false;
+    endif;
     $this->Token = $return['access_token'];
     return true;
   }
