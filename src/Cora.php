@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.14.00
+ * @version 2023.09.14.01
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -14,7 +14,7 @@ final class Cora{
     private readonly string $ClientId,
     private readonly string $Certificado,
     private readonly string $Privkey,
-    private readonly string $DirLog = __DIR__
+    private readonly string $DirLogs = __DIR__
   ){}
 
   public function Auth():bool{
@@ -27,7 +27,7 @@ final class Cora{
     curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($post));
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_VERBOSE, true);
-    curl_setopt($curl, CURLOPT_STDERR, fopen(DirLogs . '/CoraApi.log', 'a'));
+    curl_setopt($curl, CURLOPT_STDERR, fopen($this->DirLogs . '/CoraApi.log', 'a'));
     curl_setopt($curl, CURLOPT_HTTPHEADER, [
       'Content-Type: application/x-www-form-urlencoded'
     ]);
@@ -73,7 +73,7 @@ final class Cora{
     string $Bairro,
     string $Cidade,
     string $Estado,
-    string $Complemento,
+    string|null $Complemento = null,
     string $Pais,
     string $Cep,
     string $Titulo,
@@ -121,7 +121,7 @@ final class Cora{
           'district' => $Bairro,
           'city' => $Cidade,
           'state' => $Estado,
-          //'country' => $Pais,
+          'country' => $Pais,
           'complement' => $Complemento,
           'zip_code' => $Cep
         ]
@@ -174,7 +174,7 @@ final class Cora{
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post));
     curl_setopt($curl, CURLOPT_VERBOSE, true);
-    curl_setopt($curl, CURLOPT_STDERR, fopen(DirLogs . '/CoraApi.log', 'a'));
+    curl_setopt($curl, CURLOPT_STDERR, fopen($this->DirLogs . '/CoraApi.log', 'a'));
     curl_setopt($curl, CURLOPT_HTTPHEADER, [
       'Content-Type: application/json',
       'Idempotency-Key: ' . Uuid($Idempotency),
