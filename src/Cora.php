@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.14.03
+ * @version 2023.09.14.04
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -35,7 +35,7 @@ final class Cora{
     if(isset($return['error'])):
       file_put_contents(
         DirLogs . '/CoraApi.log',
-        'Auth error:' . $return['error']
+        'Auth error: ' . $return['error']
       );
       return false;
     endif;
