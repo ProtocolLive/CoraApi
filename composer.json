@@ -1,0 +1,22 @@
+{
+  "name": "protocollive/coraapi",
+  "description": "Biblioteca para usar a API do banco Cora",
+  "type": "library",
+  "require": {
+    "php": ">=8.1",
+    "ext-openssl": "*"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Fabio Carpi",
+      "email": "protocollive@outlook.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "ProtocolLive\\CoraApi\\": "src"
+    }
+  }
+}
