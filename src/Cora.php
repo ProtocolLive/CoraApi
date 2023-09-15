@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.05
+ * @version 2023.09.15.06
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -235,7 +235,7 @@ final class Cora{
       $Url .= '?' . http_build_query($Get);
     endif;
     if($Idempotency !== null):
-      $header[] = 'Idempotency-Key: ' . Uuid($Idempotency);
+      $header[] = 'Idempotency-Key: ' . $Idempotency;
     endif;
     $curl = curl_init($Url);
     if($Post === null):
