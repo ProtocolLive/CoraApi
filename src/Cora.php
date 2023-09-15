@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.07
+ * @version 2023.09.15.08
  */
 final class Cora{
   private string|null $Token = null;
@@ -47,6 +47,7 @@ final class Cora{
    * @param int $Pagina Número da página. Possui valor padrão 1
    * @param int $PorPagina Número de itens por página. Possui o valor padrão 20
    * @link https://developers.cora.com.br/reference/consultar-boletos
+   * @throws Exception
    */
   public function BoletoGet(
     string $DataInicial = null,
@@ -110,6 +111,7 @@ final class Cora{
    * @param string $Desconto Valor do desconto a ser aplicado. Se o valor for float, será entendido como porcentagem. Apesar do campo ser float, caso o tipo seja inteiro o valor decimal será truncado, mantendo o padrão de envio de valores fixos com centavos. Ex: R$ 20,50 é representado como 2050.
    * @param EmailNotify[] $Notificacao Lista de Strings que representam as regras das notificações, ou seja, quando elas serão disparadas. As possíveis Strings estão detalhadas no Enum de Tipos de Notificação
    * @link https://developers.cora.com.br/reference/emiss%C3%A3o-de-boleto-registrado
+   * @throws Exception
    */
   public function BoletoNew(
     string $Idempotency,
@@ -225,6 +227,9 @@ final class Cora{
     );
   }
 
+  /**
+   * @throws Exception
+   */
   private function Curl(
     string $Url,
     array $Get = null,
