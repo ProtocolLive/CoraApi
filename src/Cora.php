@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.00
+ * @version 2023.09.15.01
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -20,24 +20,12 @@ final class Cora{
   public function Auth():bool{
     $post['grant_type'] = 'client_credentials';
     $post['client_id'] = $this->ClientId;
-    $curl = curl_init(self::Url . '/token');
-    curl_setopt($curl, CURLOPT_SSLCERT, $this->Certificado);
-    curl_setopt($curl, CURLOPT_SSLKEY, $this->Privkey);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($post));
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_VERBOSE, true);
-    curl_setopt($curl, CURLOPT_STDERR, fopen($this->DirLogs . '/CoraApi.log', 'a'));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, [
-      'Content-Type: application/x-www-form-urlencoded'
-    ]);
-    $return = json_decode(curl_exec($curl), true);
+    $return = $this->Curl(
+      '/token',
+      Post: $post,
+      JsonPost: false
+    );
     if(isset($return['error'])):
-      file_put_contents(
-        DirLogs . '/CoraApi.log',
-        'Auth error: ' . $return['error'],
-        FILE_APPEND
-      );
       return false;
     endif;
     $this->Token = $return['access_token'];
@@ -81,24 +69,10 @@ final class Cora{
       $get['perPage'] = $PorPagina;
     endif;
 
-    $url = self::Url . '/invoices/?' . http_build_query($get);
-    file_put_contents(
-      $this->DirLogs . '/CoraApi.log',
-      'Send ' . $url . PHP_EOL,
-      FILE_APPEND
+    return $this->Curl(
+      '/invoices',
+      $get
     );
-    $curl = curl_init($url);
-    curl_setopt($curl, CURLOPT_SSLCERT, $this->Certificado);
-    curl_setopt($curl, CURLOPT_SSLKEY, $this->Privkey);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_POST, false);
-    curl_setopt($curl, CURLOPT_VERBOSE, true);
-    curl_setopt($curl, CURLOPT_STDERR, fopen($this->DirLogs . '/CoraApi.log', 'a'));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, [
-      'Accept: application/json',
-      'Authorization: Bearer ' . $this->Token
-    ]);
-    return json_decode(curl_exec($curl), true);
   }
 
   /**
@@ -233,24 +207,66 @@ final class Cora{
       $post['payment_forms'][] = 'PIX';
     endif;
 
-    $url = self::Url . '/invoices/';
-    file_put_contents(
-      $this->DirLogs . '/CoraApi.log',
-      'Send ' . $url . PHP_EOL . json_encode($post, JSON_PRETTY_PRINT),
-      FILE_APPEND
+    return $this->Curl(
+      '/invoices/',
+      Post: $post,
+      JsonPost: true,
+      Idempotency: $Idempotency
     );
-    $curl = curl_init($url);
+  }
+
+  private function Curl(
+    string $Url,
+    array $Get = null,
+    array $Post = null,
+    bool $JsonPost = true,
+    string $Idempotency = null,
+    string $HttpMethod = null
+  ):array{
+    $Url = self::Url . $Url;
+    $header = [
+      'Accept: application/json',
+      'Authorization: Bearer ' . $this->Token
+    ];
+    if($Get !== null):
+      $Url .= '?' . http_build_query($Get);
+    endif;
+    if($Idempotency !== null):
+      $header[] = 'Idempotency-Key: ' . Uuid($Idempotency);
+    endif;
+    $curl = curl_init($Url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    if($Post === null):
+      curl_setopt($curl, CURLOPT_POST, false);
+    else:
+      curl_setopt($curl, CURLOPT_POST, true);
+      if($JsonPost):
+        $header[] = 'Content-Type: application/json';
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($Post));
+      else:
+        $header[] = 'Content-Type: application/x-www-form-urlencoded';
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($Post));
+      endif;
+    endif;
+    if($HttpMethod !== null):
+      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $HttpMethod);
+    endif;
     curl_setopt($curl, CURLOPT_SSLCERT, $this->Certificado);
     curl_setopt($curl, CURLOPT_SSLKEY, $this->Privkey);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post));
     curl_setopt($curl, CURLOPT_VERBOSE, true);
     curl_setopt($curl, CURLOPT_STDERR, fopen($this->DirLogs . '/CoraApi.log', 'a'));
-    curl_setopt($curl, CURLOPT_HTTPHEADER, [
-      'Content-Type: application/json',
-      'Idempotency-Key: ' . Uuid($Idempotency),
-      'Authorization: Bearer ' . $this->Token
-    ]);
-    return json_decode(curl_exec($curl), true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+    file_put_contents(
+      $this->DirLogs . '/CoraApi.log',
+      PHP_EOL . 'Send ' . $Url . PHP_EOL,
+      FILE_APPEND
+    );
+    $return = json_decode(curl_exec($curl), true);
+    file_put_contents(
+      $this->DirLogs . '/CoraApi.log',
+      PHP_EOL . 'Receive:' . PHP_EOL . json_encode($return, JSON_PRETTY_PRINT),
+      FILE_APPEND
+    );
+    return $return;
   }
 }
