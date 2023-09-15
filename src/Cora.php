@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.08
+ * @version 2023.09.15.09
  */
 final class Cora{
   private string|null $Token = null;
@@ -37,6 +37,22 @@ final class Cora{
     endif;
     $this->Token = $return['access_token'];
     return true;
+  }
+
+  /**
+   * @link https://developers.cora.com.br/reference/cancelamento-de-boleto
+   * @throws Exception
+   */
+  public function BoletoDel(
+    string $Id
+  ):void{
+    if($this->Token === null):
+      throw new Exception('Você deve autenticar primeiro');
+    endif;
+    $this->Curl(
+      '/invoices/' . $Id,
+      HttpMethod: 'DELETE'
+    );
   }
 
   /**
@@ -237,7 +253,7 @@ final class Cora{
     bool $JsonPost = true,
     string $Idempotency = null,
     string $HttpMethod = null
-  ):array{
+  ):array|null{
     $Url = $this->$Url . $Url;
     $header = [
       'Accept: application/json',
