@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.04
+ * @version 2023.09.15.05
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -270,6 +270,10 @@ final class Cora{
       PHP_EOL . 'Receive:' . PHP_EOL . json_encode($return, JSON_PRETTY_PRINT) . PHP_EOL,
       FILE_APPEND
     );
+    $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    if($code >= 400):
+      throw new Exception('HTTP error code ' . $code, $code);
+    endif;
     return $return;
   }
 }
