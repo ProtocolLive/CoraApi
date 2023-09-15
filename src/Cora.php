@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.11
+ * @version 2023.09.15.12
  */
 final class Cora{
   private string|null $Token = null;
@@ -63,9 +63,11 @@ final class Cora{
    * @param int $Pagina Número da página. Possui valor padrão 1
    * @param int $PorPagina Número de itens por página. Possui o valor padrão 20
    * @link https://developers.cora.com.br/reference/consultar-boletos
+   * @link https://developers.cora.com.br/reference/consultar-detalhes-de-um-boleto
    * @throws Exception
    */
   public function BoletoGet(
+    string $Id = null,
     string $DataInicial = null,
     string $DataFinal = null,
     BoletoStatus $Status = null,
@@ -97,8 +99,8 @@ final class Cora{
     endif;
 
     return $this->Curl(
-      '/invoices',
-      $get
+      '/invoices/' . $Id !== null ? $Id : '',
+      $Id === null ? $get : null
     );
   }
 
