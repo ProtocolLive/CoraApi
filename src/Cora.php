@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.09
+ * @version 2023.09.15.10
  */
 final class Cora{
   private string|null $Token = null;
@@ -254,7 +254,7 @@ final class Cora{
     string $Idempotency = null,
     string $HttpMethod = null
   ):array|null{
-    $Url = $this->$Url . $Url;
+    $Url = $this->Url . $Url;
     $header = [
       'Accept: application/json',
       'Authorization: Bearer ' . $this->Token
