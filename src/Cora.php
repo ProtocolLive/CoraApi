@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.02
+ * @version 2023.09.15.03
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -238,7 +238,6 @@ final class Cora{
       $header[] = 'Idempotency-Key: ' . Uuid($Idempotency);
     endif;
     $curl = curl_init($Url);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     if($Post === null):
       curl_setopt($curl, CURLOPT_POST, false);
     else:
@@ -254,6 +253,7 @@ final class Cora{
     if($HttpMethod !== null):
       curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $HttpMethod);
     endif;
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_SSLCERT, $this->Certificado);
     curl_setopt($curl, CURLOPT_SSLKEY, $this->Privkey);
     curl_setopt($curl, CURLOPT_VERBOSE, true);
