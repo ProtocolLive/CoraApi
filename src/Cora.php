@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.14.05
+ * @version 2023.09.14.06
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -178,8 +178,9 @@ final class Cora{
 
     $url = self::Url . '/invoices/';
     file_put_contents(
-      DirLogs . '/CoraApi.log',
-      'Send ' . $url . PHP_EOL . json_encode($post, JSON_PRETTY_PRINT)
+      $this->DirLogs . '/CoraApi.log',
+      'Send ' . $url . PHP_EOL . json_encode($post, JSON_PRETTY_PRINT),
+      FILE_APPEND
     );
     $curl = curl_init($url);
     curl_setopt($curl, CURLOPT_SSLCERT, $this->Certificado);
