@@ -4,18 +4,25 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.06
+ * @version 2023.09.15.07
  */
 final class Cora{
-  private const Url = 'https://matls-clients.api.stage.cora.com.br';
   private string|null $Token = null;
+  private string|null $Url = null;
 
   public function __construct(
     private readonly string $ClientId,
     private readonly string $Certificado,
     private readonly string $Privkey,
-    private readonly string $DirLogs = __DIR__
-  ){}
+    private readonly string $DirLogs = __DIR__,
+    private readonly bool $Test = false
+  ){
+    if($Test):
+      $this->Url = 'https://matls-clients.api.stage.cora.com.br';
+    else:
+      $this->Url = 'https://matls-clients.api.cora.com.br';
+    endif;
+  }
 
   public function Auth():bool{
     $post['grant_type'] = 'client_credentials';
@@ -226,7 +233,7 @@ final class Cora{
     string $Idempotency = null,
     string $HttpMethod = null
   ):array{
-    $Url = self::Url . $Url;
+    $Url = $this->$Url . $Url;
     $header = [
       'Accept: application/json',
       'Authorization: Bearer ' . $this->Token
