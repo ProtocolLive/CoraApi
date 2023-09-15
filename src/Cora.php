@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.10
+ * @version 2023.09.15.11
  */
 final class Cora{
   private string|null $Token = null;
@@ -289,7 +289,7 @@ final class Cora{
     curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
     file_put_contents(
       $this->DirLogs . '/CoraApi.log',
-      PHP_EOL . 'Send ' . PHP_EOL,
+      PHP_EOL . 'Send ' . PHP_EOL . json_encode($Post, JSON_PRETTY_PRINT) . PHP_EOL,
       FILE_APPEND
     );
     $return = json_decode(curl_exec($curl), true);
