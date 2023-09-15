@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.14.06
+ * @version 2023.09.15.00
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -42,6 +42,63 @@ final class Cora{
     endif;
     $this->Token = $return['access_token'];
     return true;
+  }
+
+  /**
+   * @param string $DataInicial Data início, no formato YYYY-MM-DD. Atenção: O intervalo de tempo da consulta estará relacionado à data de vencimento da fatura
+   * @param string $DataFinal Data final, no formato YYYY-MM-DD
+   * @param BoletoStatus $Status Descrição dos possíveis estados do boleto
+   * @param string $Cpf CPF/CNPJ do destinatário
+   * @param int $Pagina Número da página. Possui valor padrão 1
+   * @param int $PorPagina Número de itens por página. Possui o valor padrão 20
+   * @link https://developers.cora.com.br/reference/consultar-boletos
+   */
+  public function BoletoGet(
+    string $DataInicial = null,
+    string $DataFinal = null,
+    BoletoStatus $Status = null,
+    string $Cpf = null,
+    int $Pagina = null,
+    int $PorPagina = null
+  ):array{
+    $get = [];
+    if($DataInicial !== null):
+      $get['start'] = $DataInicial;
+    endif;
+    if($DataFinal !== null):
+      $get['end'] = $DataFinal;
+    endif;
+    if($Status !== null):
+      $get['state'] = $Status->value;
+    endif;
+    if($Cpf !== null):
+      $get['search'] = $Cpf;
+    endif;
+    if($Pagina !== null):
+      $get['page'] = $Pagina;
+    endif;
+    if($PorPagina !== null):
+      $get['perPage'] = $PorPagina;
+    endif;
+
+    $url = self::Url . '/invoices/?' . http_build_query($get);
+    file_put_contents(
+      $this->DirLogs . '/CoraApi.log',
+      'Send ' . $url . PHP_EOL,
+      FILE_APPEND
+    );
+    $curl = curl_init($url);
+    curl_setopt($curl, CURLOPT_SSLCERT, $this->Certificado);
+    curl_setopt($curl, CURLOPT_SSLKEY, $this->Privkey);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_POST, false);
+    curl_setopt($curl, CURLOPT_VERBOSE, true);
+    curl_setopt($curl, CURLOPT_STDERR, fopen($this->DirLogs . '/CoraApi.log', 'a'));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, [
+      'Accept: application/json',
+      'Authorization: Bearer ' . $this->Token
+    ]);
+    return json_decode(curl_exec($curl), true);
   }
 
   /**
