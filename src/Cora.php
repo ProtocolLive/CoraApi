@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.01
+ * @version 2023.09.15.02
  */
 final class Cora{
   private const Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -49,6 +49,9 @@ final class Cora{
     int $Pagina = null,
     int $PorPagina = null
   ):array{
+    if($this->Token === null):
+      throw new Exception('Você deve autenticar primeiro');
+    endif;
     $get = [];
     if($DataInicial !== null):
       $get['start'] = $DataInicial;
