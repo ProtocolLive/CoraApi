@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.16.00
+ * @version 2023.09.16.01
  */
 final class Cora{
   private string|null $Token = null;
@@ -15,7 +15,8 @@ final class Cora{
     private readonly string $Certificado,
     private readonly string $Privkey,
     private readonly string $DirLogs = __DIR__,
-    private readonly bool $Test = false
+    private readonly bool $Test = false,
+    private readonly bool $CurlLog = false
   ){
     if($Test):
       $this->Url = 'https://matls-clients.api.stage.cora.com.br';
@@ -286,7 +287,7 @@ final class Cora{
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_SSLCERT, $this->Certificado);
     curl_setopt($curl, CURLOPT_SSLKEY, $this->Privkey);
-    curl_setopt($curl, CURLOPT_VERBOSE, true);
+    curl_setopt($curl, CURLOPT_VERBOSE, $this->CurlLog);
     curl_setopt($curl, CURLOPT_STDERR, fopen($this->DirLogs . '/CoraApi.log', 'a'));
     curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
     file_put_contents(
