@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.16.02
+ * @version 2023.09.16.03
  */
 final class Cora{
   private string|null $Token = null;
@@ -307,5 +307,44 @@ final class Cora{
       throw new Exception('HTTP error code ' . $code, $code);
     endif;
     return $return;
+  }
+
+  /**
+   * @link https://developers.cora.com.br/reference/exclus%C3%A3o-de-endpoint
+   */
+  public function WebhookDel(
+    string $Id
+  ):array{
+    return $this->Curl(
+      '/endpoints/' . $Id,
+      HttpMethod: 'DELETE'
+    );
+  }
+
+  /**
+   * @link https://developers.cora.com.br/reference/lista-de-endpoints
+   */
+  public function WebhookList():array{
+    return $this->Curl('/endpoints');
+  }
+
+  /**
+   * @link https://developers.cora.com.br/reference/cria%C3%A7%C3%A3o-de-endpoints
+   */
+  public function WebhookSet(
+    string $Url,
+    WebhookRecurso $Recurso,
+    GatilhoBoleto $Gatilho
+  ):array{
+    $post = [
+      'url' => $Url,
+      'resource' => $Recurso->value,
+      'trigger' => $Gatilho->value
+    ];
+    return $this->Curl(
+      '/endpoints',
+      Post: $post,
+      Idempotency: Uuid(sha1($Url . $Recurso->value . $Gatilho->value))
+    );
   }
 }
