@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.15.12
+ * @version 2023.09.16.00
  */
 final class Cora{
   private string|null $Token = null;
@@ -99,7 +99,7 @@ final class Cora{
     endif;
 
     return $this->Curl(
-      '/invoices/' . $Id !== null ? $Id : '',
+      '/invoices/' . ($Id !== null ? $Id : ''),
       $Id === null ? $get : null
     );
   }
