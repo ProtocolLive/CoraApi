@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.16.01
+ * @version 2023.09.16.02
  */
 final class Cora{
   private string|null $Token = null;
@@ -292,15 +292,16 @@ final class Cora{
     curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
     file_put_contents(
       $this->DirLogs . '/CoraApi.log',
-      PHP_EOL . 'Send ' . PHP_EOL . json_encode($Post, JSON_PRETTY_PRINT) . PHP_EOL,
+      PHP_EOL . 'Send ' . PHP_EOL . ($Post !== null ? json_encode($Post, JSON_PRETTY_PRINT) : null) . PHP_EOL,
       FILE_APPEND
     );
-    $return = json_decode(curl_exec($curl), true);
+    $return = curl_exec($curl);
     file_put_contents(
       $this->DirLogs . '/CoraApi.log',
-      PHP_EOL . 'Receive:' . PHP_EOL . json_encode($return, JSON_PRETTY_PRINT) . PHP_EOL,
+      PHP_EOL . 'Receive:' . PHP_EOL . $return . PHP_EOL,
       FILE_APPEND
     );
+    $return = json_decode($return, true);
     $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if($code >= 400):
       throw new Exception('HTTP error code ' . $code, $code);
