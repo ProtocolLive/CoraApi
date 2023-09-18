@@ -6,7 +6,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.17.00
+ * @version 2023.09.18.00
  */
 final class Cora{
   private string|null $Token = null;
@@ -306,7 +306,7 @@ final class Cora{
     $return = json_decode($return, true);
     $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if($code >= 400):
-      throw new Exception('HTTP error code ' . $code, $code);
+      throw new Exception($return['errors'][0]['message'], $code);
     endif;
     return $return;
   }
