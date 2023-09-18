@@ -1,4 +1,6 @@
 <?php
+//Protocol Corporation Ltda.
+//https://github.com/ProtocolLive/CoraApi
 
 namespace ProtocolLive\CoraApi;
 use Exception;
