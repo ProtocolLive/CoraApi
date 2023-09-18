@@ -4,7 +4,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.16.03
+ * @version 2023.09.17.00
  */
 final class Cora{
   private string|null $Token = null;
@@ -307,6 +307,51 @@ final class Cora{
       throw new Exception('HTTP error code ' . $code, $code);
     endif;
     return $return;
+  }
+
+  /**
+   * @param string $Id Identificador do pagamento iniciado.
+   * @param string $Idempotency UUID aleatório gerado por você. Nós utilizamos esse header para evitar duplicidade de registros, ou seja, caso você não tenha recebido a resposta de alguma requisição e mandar o mesmo UUID, nós não duplicaremos o registro.
+   * @link https://developers.cora.com.br/reference/cancelamento-de-pagamento
+   * @throws Exception
+   */
+  public function PagamentoDel(
+    string $Id,
+    string $Idempotency
+  ):void{
+    $this->Curl(
+      '/payments/initiate/' . $Id,
+      Idempotency: $Idempotency,
+      HttpMethod: 'DELETE',
+    );
+  }
+
+  /**
+   * @param int $Id Código definido por você, pode ser um id do recurso no seu sistema.
+   * @param string $CodigoBarras Código de barras da fatura a ser paga
+   * @param string $Idempotency UUID aleatório gerado por você. Nós utilizamos esse header para evitar duplicidade de registros, ou seja, caso você não tenha recebido a resposta de alguma requisição e mandar o mesmo UUID, nós não duplicaremos o registro.
+   * @param string $Data Campo para agendar um pagamento, no formato "YYYY-MM-DD"
+   * @link https://developers.cora.com.br/reference/inicia%C3%A7%C3%A3o-de-pagamento
+   * @throws Exception
+   */
+  public function PagamentoNew(
+    int $Id,
+    string $CodigoBarras,
+    string $Idempotency,
+    string $Data = null
+  ):array{
+    $post = [
+      'code' => $Id,
+      'digitable_line' => $CodigoBarras
+    ];
+    if($Data !== null):
+      $post['scheduled_at'] = $Data;
+    endif;
+    return $this->Curl(
+      '/payments/initiate',
+      Post: $post,
+      Idempotency: $Idempotency
+    );
   }
 
   /**
