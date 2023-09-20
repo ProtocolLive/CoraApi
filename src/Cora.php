@@ -6,7 +6,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.20.00
+ * @version 2023.09.20.01
  */
 final class Cora{
   private string|null $Token = null;
@@ -380,7 +380,8 @@ final class Cora{
   public function WebhookSet(
     string $Url,
     WebhookRecurso $Recurso,
-    GatilhoBoleto $Gatilho
+    GatilhoBoleto $Gatilho,
+    string $Idempotency
   ):array{
     $post = [
       'url' => $Url,
@@ -390,7 +391,7 @@ final class Cora{
     return $this->Curl(
       '/endpoints',
       Post: $post,
-      Idempotency: Uuid(sha1($Url . $Recurso->value . $Gatilho->value))
+      Idempotency: $Idempotency
     );
   }
 }
