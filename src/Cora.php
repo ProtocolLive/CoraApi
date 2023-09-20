@@ -6,7 +6,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.18.00
+ * @version 2023.09.20.00
  */
 final class Cora{
   private string|null $Token = null;
@@ -303,12 +303,11 @@ final class Cora{
       PHP_EOL . 'Receive:' . PHP_EOL . $return . PHP_EOL,
       FILE_APPEND
     );
-    $return = json_decode($return, true);
     $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if($code >= 400):
-      throw new Exception($return['errors'][0]['message'], $code);
+      throw new Exception($return, $code);
     endif;
-    return $return;
+    return json_decode($return, true);
   }
 
   /**
