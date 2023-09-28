@@ -6,7 +6,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.20.01
+ * @version 2023.09.27.00
  */
 final class Cora{
   private string|null $Token = null;
@@ -157,6 +157,7 @@ final class Cora{
     int $MultaData = null,
     int $Juros = null,
     string $Desconto = null,
+    string $NotificacaoEmail = null,
     array $Notificacao = null,
     bool $Pix = true
   ):array{
@@ -228,7 +229,7 @@ final class Cora{
         'channels' => ['EMAIL'],
         'destination' => [
           'name' => $Nome,
-          'email' => $Email
+          'email' => $NotificacaoEmail ?? $Email
         ],
         'rules' => []
       ];

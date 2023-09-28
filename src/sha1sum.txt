@@ -1,5 +1,5 @@
 7e41fd979a79ef8bdcfda5e67cb621eaf401ab59  BoletoStatus.php
-fae14056569c2d5627f5e6ed4a3e35ef2ec23819  Cora.php
+b6a430c4954fe54cf91b665f9ce54b2c8429806a  Cora.php
 e6c2438e766e4441e5b579db048c23b20c73e9d8  EmailNotify.php
 c5a1b9bf9e545ebd573ec0b0c5f812eb1f9e04b3  GatilhoBoleto.php
 19c1f72add12db4393c8387752e986ab0694a198  WebhookRecurso.php
