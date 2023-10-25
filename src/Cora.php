@@ -6,7 +6,7 @@ namespace ProtocolLive\CoraApi;
 use Exception;
 
 /**
- * @version 2023.09.27.00
+ * @version 2023.10.25.00
  */
 final class Cora{
   private string|null $Token = null;
@@ -361,8 +361,8 @@ final class Cora{
    */
   public function WebhookDel(
     string $Id
-  ):array{
-    return $this->Curl(
+  ):void{
+    $this->Curl(
       '/endpoints/' . $Id,
       HttpMethod: 'DELETE'
     );
