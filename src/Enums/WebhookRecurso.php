@@ -2,10 +2,10 @@
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/CoraApi
 
-namespace ProtocolLive\CoraApi;
+namespace ProtocolLive\CoraApi\Enums;
 
 /**
- * @version 2023.09.15.00
+ * @version 2024.01.18.00
  * @link https://developers.cora.com.br/reference/cria%C3%A7%C3%A3o-de-endpoints#enum-de-recursos
  */
 enum WebhookRecurso:string{

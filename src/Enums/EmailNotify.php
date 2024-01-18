@@ -2,10 +2,10 @@
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/CoraApi
 
-namespace ProtocolLive\CoraApi;
+namespace ProtocolLive\CoraApi\Enums;
 
 /**
- * @version 2023.09.14.00
+ * @version 2024.01.18.00
  */
 enum EmailNotify:string{
   /**
