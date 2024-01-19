@@ -5,7 +5,7 @@
 namespace ProtocolLive\CoraApi\Enums;
 
 /**
- * @version 2024.01.18.00
+ * @version 2024.01.19.00
  */
 enum EmailNotify:string{
   /**
@@ -28,6 +28,10 @@ enum EmailNotify:string{
    * Notifica dois dias antes da data de vencimento.
    */
   case Antes2 = 'NOTIFY_TWO_DAYS_BEFORE_DUE_DATE';
+  /**
+   * Esse enum não existe na documentação
+   */
+  case Atrasado = 'NOTIFY_REMINDER_LATE';
   /**
    * Notifica dois dias depois da data de vencimento.
    */
