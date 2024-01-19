@@ -4,9 +4,14 @@
 
 namespace ProtocolLive\CoraApi;
 use Exception;
+use ProtocolLive\CoraApi\Enums\{
+  BoletoStatus,
+  GatilhoBoleto,
+  WebhookRecurso
+};
 
 /**
- * @version 2023.10.25.00
+ * @version 2024.01.19.00
  */
 final class Cora{
   private string|null $Token = null;
