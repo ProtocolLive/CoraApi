@@ -11,11 +11,11 @@ use ProtocolLive\CoraApi\Enums\{
 };
 
 /**
- * @version 2024.01.19.00
+ * @version 2024.01.21.00
  */
 final class Cora{
-  private string|null $Token = null;
   private string|null $Url = null;
+  public string|null $Token = null;
 
   public function __construct(
     private readonly string $ClientId,
@@ -32,7 +32,7 @@ final class Cora{
     endif;
   }
 
-  public function Auth():bool{
+  public function Auth():array|false{
     $post['grant_type'] = 'client_credentials';
     $post['client_id'] = $this->ClientId;
     $return = $this->Curl(
@@ -44,7 +44,7 @@ final class Cora{
       return false;
     endif;
     $this->Token = $return['access_token'];
-    return true;
+    return [$return['access_token'], $return['expires_in']];
   }
 
   /**
