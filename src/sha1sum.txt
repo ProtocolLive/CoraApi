@@ -1,7 +1,7 @@
 85e3e9868a2573c8a71eca31d87908069d47b74c  Cora.php
 172a24ae65a9895f9101aea0410d77c74d856bc9  Enums\BoletoStatus.php
-d567167f5d4a6db12b4fe64620e07b13985ec0a1  Enums\EmailNotify.php
+2c98160356edbfced2582e2d2033cc61c657a278  Enums\EmailNotify.php
 566f4d947f85053936c90a6fd2128739b1c948fb  Enums\GatilhoBoleto.php
-1f5741f1b75fd06edd1ccd3c01f6ba3986333ab1  Enums\NotifyStatus.php
+65f391e86337e43cf7606f860f853ab8d5210d5b  Enums\NotifyStatus.php
 fa620ccc11c9c802c79d6c90a55a3ccb893ebffb  Enums\WebhookRecurso.php
 06157923fd1c21a12ce147466ef767b5e2045750  Enums\WebhookRecurso2.php
