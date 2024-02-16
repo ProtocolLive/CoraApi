@@ -11,7 +11,7 @@ use ProtocolLive\CoraApi\Enums\{
 };
 
 /**
- * @version 2024.01.21.00
+ * @version 2024.02.16.00
  */
 final class Cora{
   private string|null $Url = null;
@@ -150,13 +150,13 @@ final class Cora{
     string $Bairro,
     string $Cidade,
     string $Estado,
-    string|null $Complemento = null,
     string $Pais,
     string $Cep,
     string $Titulo,
     string $Descricao,
     int $Valor,
     string $Vencimento,
+    string $Complemento = null,
     int $MultaPorcento = null,
     int $MultaValor = null,
     int $MultaData = null,
