@@ -1,4 +1,4 @@
-c979dbe72e401d7af663db027445b1a3938aa77c  Cora.php
+5070c9a1ce108e851ad6a301759f6d3022cd0a1d  Cora.php
 172a24ae65a9895f9101aea0410d77c74d856bc9  Enums\BoletoStatus.php
 2c98160356edbfced2582e2d2033cc61c657a278  Enums\EmailNotify.php
 566f4d947f85053936c90a6fd2128739b1c948fb  Enums\GatilhoBoleto.php
